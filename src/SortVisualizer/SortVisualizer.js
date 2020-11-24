@@ -3,6 +3,7 @@ import React from 'react';
 import './sortvisualizer.scss';
 import * as algorithms from './Algorithms.js';
 
+// Constants
 const LENGTH = 100;
 const SPEED = 10;
 
@@ -41,6 +42,7 @@ class SortVisualizer extends React.Component {
         this.setState({ array });
     }
 
+    // Reset graph on screen with style
     resetVisual() {
         this.resetArray();
 
@@ -50,6 +52,7 @@ class SortVisualizer extends React.Component {
         }
     }
 
+    // Merge sort visualization
     mergeSort() {
         let { array } = this.state;
         let steps = [];
@@ -58,7 +61,9 @@ class SortVisualizer extends React.Component {
         //console.log(array);
         //console.log(steps);
 
+        // Iterate through steps
         for (let i = 0; i < steps.length; i++) {
+            // Check bar
             if (steps[i][0] === 0) {
                 setTimeout(() => {
                     let check_bar = document.getElementById("bar-" + String(steps[i][1]));
@@ -68,6 +73,7 @@ class SortVisualizer extends React.Component {
                     }, SPEED);
                 }, i * SPEED);
             }
+            // Compare bars
             else if (steps[i][0] === 1) {
                 setTimeout(() => {
                     let comp1 = document.getElementById("bar-" + String(steps[i][1]));
@@ -80,6 +86,7 @@ class SortVisualizer extends React.Component {
                     }, SPEED);
                 }, i * SPEED);
             }
+            // Change bar value
              if (steps[i][0] === 2) {
                 setTimeout(() => {
                     //let temp = array[steps[i][1]];
@@ -93,12 +100,15 @@ class SortVisualizer extends React.Component {
         }
     }
 
+    // Selection sort visualizer
     selectionSort() {
         let { array } = this.state;
         console.log(array);
         let steps = algorithms.selectionSort(array);
 
+        // Iterate through steps
         for (let i = 0; i < steps.length; i++) {
+            // Check bar
             if (steps[i][0] === 0) {
                 setTimeout(() => {
                     let check_bar = document.getElementById("bar-" + String(steps[i][1]));
@@ -108,6 +118,7 @@ class SortVisualizer extends React.Component {
                     }, SPEED);
                 }, i * SPEED);
             }
+            // Compare two bars to find minimum
             else if (steps[i][0] === 1) {
                 setTimeout(() => {
                     let removed = document.getElementById("bar-" + String(steps[i][1]));
@@ -118,6 +129,7 @@ class SortVisualizer extends React.Component {
                     }, 1);
                 }, i * SPEED);
             }
+            // Set bar at front
             else if (steps[i][0] === 2) {
                 setTimeout(() => {
                     let temp = array[steps[i][1]];
@@ -144,6 +156,7 @@ class SortVisualizer extends React.Component {
         }
     }
 
+    // Render function
     render() {
         const { array } = this.state;
         return (
