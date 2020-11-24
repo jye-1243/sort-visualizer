@@ -1,0 +1,38 @@
+﻿body {
+}
+
+html, body {
+    margin: 0;
+    background-color: #evee;
+    display: flex;
+    justify-content: center;
+}
+
+/* https://css-tricks.com/making-a-bar-chart-with-css-grid/ */
+.bar-graph {
+    height: 80vh;
+    width: 70vw;
+    display: grid;
+    grid-template-columns: repeat(100, 1fr);
+    grid-template-rows: repeat(100, 1fr);
+    grid-column-gap: 1px;
+    padding-top: 5vh;
+    
+}
+
+$totalCols: 100;
+
+@mixin chartValue($data) {
+    $totalRows: 101;
+    $result: $totalRows - $data;
+    grid-row-start: $result;
+}
+
+@for $i from 1 through $totalCols {
+    #bar-#{$i} {
+        @include chartValue($i);
+        grid-row-end: 101;
+        border-radius: 3px 3px 0 0;
+        background-color: #ff4136;
+    }
+}
