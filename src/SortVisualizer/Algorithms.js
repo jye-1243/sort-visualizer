@@ -6,6 +6,7 @@ export function selectionSort(array) {
     for (let i = 0; i < array.length; i++) {
         list.push(array[i])
     }
+
     let steps = [];
     for (let i = 0; i < list.length; i++) {
         let min = list[i];
@@ -13,13 +14,13 @@ export function selectionSort(array) {
         let temp = list[i];
 
         // Mark as swap target
-        steps.push([1, list[i],list[i]]);
+        steps.push([1, i,i]);
 
         for (let j = i + 1; j < list.length; j++) {
             // Check
-            steps.push([0, list[j]]);
+            steps.push([0, j]);
             if (list[j] < min) {
-                steps.push([1, list[min_index], list[j]]);
+                steps.push([1, min_index, j]);
                 min = list[j];
                 min_index = j;
             }
@@ -36,12 +37,11 @@ export function selectionSort(array) {
 export function mergeSort(unsortedArray, steps, startIndex) {
 
     if (unsortedArray.length === 1) {
-        steps.push([0, unsortedArray[0]]);
+        steps.push([0, startIndex]);
         return unsortedArray;
     }
 
     else if (unsortedArray.length === 0) {
-        steps.push([-1, [0]]);
         return unsortedArray;
     }
 
@@ -53,31 +53,31 @@ export function mergeSort(unsortedArray, steps, startIndex) {
 }
 
 export function merge(left, right, start, steps) {
-    let result = [], leftIndex = 0, rightIndex = 0;
+    let leftIndex = 0, rightIndex = 0;
 
     let original = left.concat(right);
     let moves = [];
 
     while (leftIndex < left.length && rightIndex < right.length) {
-        steps.push([1, left[leftIndex], right[rightIndex]]);
+        steps.push([1, start + leftIndex, start + left.length + rightIndex]);
 
-        let temp = original[leftIndex+rightIndex];
+        //let temp = original[leftIndex+rightIndex];
 
         if (left[leftIndex] < right[rightIndex]) {
-            result.push(left[leftIndex]);
+            //result.push(left[leftIndex]);
 
-            moves.push([2, start + leftIndex + rightIndex, start + original.indexOf(left[leftIndex])]);
+            moves.push([2, start + leftIndex + rightIndex, left[leftIndex]]);
 
-            original[original.indexOf(left[leftIndex])] = temp;
+            //original[original.indexOf(left[leftIndex])] = temp;
             original[leftIndex + rightIndex] = left[leftIndex];
             leftIndex++;
 
         }
         else {
-            result.push(right[rightIndex])
-            moves.push([2, start + leftIndex + rightIndex, start + original.indexOf(right[rightIndex])]);
+            //result.push(right[rightIndex])
+            moves.push([2, start + leftIndex + rightIndex, right[rightIndex]]);
 
-            original[original.indexOf(right[rightIndex])] = temp;
+            //original[original.indexOf(right[rightIndex])] = temp;
             original[leftIndex + rightIndex] = right[rightIndex];
 
             rightIndex++;
@@ -85,37 +85,38 @@ export function merge(left, right, start, steps) {
 
     }
 
-    result = result.concat(right.slice(rightIndex));
-    result = result.concat(left.slice(leftIndex));
+    //result = result.concat(right.slice(rightIndex));
+    //result = result.concat(left.slice(leftIndex));
 
     while (rightIndex < right.length) {
-        let temp = original[leftIndex + rightIndex];
+        //let temp = original[leftIndex + rightIndex];
 
-        moves.push([2, start + leftIndex + rightIndex, start + original.indexOf(right[rightIndex])]);
+        moves.push([2, start + leftIndex + rightIndex, right[rightIndex]]);
 
-        original[original.indexOf(right[rightIndex])] = temp;
+        //original[original.indexOf(right[rightIndex])] = temp;
         original[leftIndex + rightIndex] = right[rightIndex];
 
         rightIndex++;
     }
 
     while (leftIndex < left.length) {
-        let temp = original[leftIndex + rightIndex];
+        //let temp = original[leftIndex + rightIndex];
 
-        moves.push([2, start + leftIndex + rightIndex, start + original.indexOf(left[leftIndex])]);
+        moves.push([2, start + leftIndex + rightIndex, left[leftIndex]]);
 
-        original[original.indexOf(left[leftIndex])] = temp;
+        //original[original.indexOf(left[leftIndex])] = temp;
         original[leftIndex + rightIndex] = left[leftIndex];
 
         leftIndex++;
     }
 
 
-    //console.log( moves);
+    // console.log( moves);
     for (let i = 0; i < moves.length; i++) {
         steps.push(moves[i]);
     }
 
     //console.log("RESULT: " + result);
-    return result;
+    //console.log("MODIFIED: " + original);
+    return original;
 }

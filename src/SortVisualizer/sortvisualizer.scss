@@ -29,7 +29,7 @@ $totalCols: 100;
 }
 
 @for $i from 1 through $totalCols {
-    #bar-#{$i} {
+    .bar-#{$i} {
         @include chartValue($i);
         grid-row-end: 101;
         border-radius: 3px 3px 0 0;

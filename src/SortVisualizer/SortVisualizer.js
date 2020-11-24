@@ -24,17 +24,19 @@ class SortVisualizer extends React.Component {
 
     resetArray() {
         const array = [];
+        // Random values from 1 to length
         for (let i = 0; i < LENGTH; i++)
-            array[i] = i + 1;
+            array[i] = Math.floor(Math.random() * LENGTH) + 1;
 
-        // From https://stackoverflow.com/questions/5836833/create-an-array-with-random-values
-        var tmp, current, top = LENGTH;
-        if (top) while (--top) {
-            current = Math.floor(Math.random() * (top + 1));
-            tmp = array[current];
-            array[current] = array[top];
-            array[top] = tmp;
-        }
+        //// Below is for list of unique values from 1 to length
+        //// From https://stackoverflow.com/questions/5836833/create-an-array-with-random-values
+        //var tmp, current, top = LENGTH;
+        //if (top) while (--top) {
+        //    current = Math.floor(Math.random() * (top + 1));
+        //    tmp = array[current];
+        //    array[current] = array[top];
+        //    array[top] = tmp;
+        //}
 
         this.setState({ array });
     }
@@ -43,7 +45,7 @@ class SortVisualizer extends React.Component {
         this.resetArray();
 
         for (let i = 0; i < LENGTH; i++) {
-            let bar = document.getElementById("bar-" + String(i + 1));
+            let bar = document.getElementById("bar-" + String(i));
             bar.style.setProperty('background-color', '#ff4136');
         }
     }
@@ -51,7 +53,10 @@ class SortVisualizer extends React.Component {
     mergeSort() {
         let { array } = this.state;
         let steps = [];
-        let sorted = algorithms.mergeSort(array, steps, 0);
+        algorithms.mergeSort(array, steps, 0);
+
+        //console.log(array);
+        //console.log(steps);
 
         for (let i = 0; i < steps.length; i++) {
             if (steps[i][0] === 0) {
@@ -77,20 +82,20 @@ class SortVisualizer extends React.Component {
             }
              if (steps[i][0] === 2) {
                 setTimeout(() => {
-                    let temp = array[steps[i][1]];
-                    array[steps[i][1]] = array[steps[i][2]];
-                    array[steps[i][2]] = temp;
+                    //let temp = array[steps[i][1]];
+                    array[steps[i][1]] = steps[i][2];
+                    //array[steps[i][2]] = temp;
                     this.setState({ array });
                 }, i * SPEED);
-            }
+             }
 
-            
+            //console.log(this.state);
         }
     }
 
-
     selectionSort() {
         let { array } = this.state;
+        console.log(array);
         let steps = algorithms.selectionSort(array);
 
         for (let i = 0; i < steps.length; i++) {
@@ -119,16 +124,21 @@ class SortVisualizer extends React.Component {
                     array[steps[i][1]] = array[steps[i][2]];
                     array[steps[i][2]] = temp;
                     this.setState({ array });
+                    console.log(steps[i]);
 
-                    for (let j = array[steps[i][1]]; j <= LENGTH; j++) {
-                        let bar = document.getElementById("bar-" + String(j));
-                        if (j === array[steps[i][1]]) {
-                            bar.style.setProperty('background-color', 'yellow');
+                    setTimeout(() => {
+                        for (let j = steps[i][1]; j < LENGTH; j++) {
+                            let bar = document.getElementById("bar-" + String(j));
+                            if (j === steps[i][1]) {
+                                bar.style.setProperty('background-color', 'yellow');
+                                console.log(j);
+                            }
+                            else {
+                                bar.style.setProperty('background-color', '#ff4136');
+                            }
                         }
-                        else {
-                            bar.style.setProperty('background-color', '#ff4136');
-                        }
-                    }
+                    }, 1);
+                    
                 }, i * SPEED);
             }
         }
@@ -140,7 +150,7 @@ class SortVisualizer extends React.Component {
             <div>
                 <div className="bar-graph">
                     {array.map((value, idx) => (
-                        < div className="bar" id={"bar-" + String(value)} key={idx} value={value}>
+                        < div className={"bar-" + String(value)} id={"bar-" + String(idx)} key={idx} data-value={value}>
                             
                         </div >
                     ))}
