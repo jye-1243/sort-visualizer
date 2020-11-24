@@ -4,6 +4,7 @@ import './sortvisualizer.scss';
 import * as algorithms from './Algorithms.js';
 
 const LENGTH = 100;
+const SPEED = 10;
 
 class SortVisualizer extends React.Component {
     constructor(props) {
@@ -11,23 +12,20 @@ class SortVisualizer extends React.Component {
         this.state = {
             array: [],
         }
-        this.swap = this.swap.bind(this);
 
         this.selectionSort = this.selectionSort.bind(this);
+        this.mergeSort = this.mergeSort.bind(this);
         this.resetArray = this.resetArray.bind(this);
-        this.test = this.test.bind(this);
     }
 
     componentDidMount() {
         this.resetArray();
-        //this.selectionSort();
-        //setTimeout(this.swap, 2000);
     }
 
     resetArray() {
         const array = [];
         for (let i = 0; i < LENGTH; i++)
-            array[i] = i+1;
+            array[i] = i + 1;
 
         // From https://stackoverflow.com/questions/5836833/create-an-array-with-random-values
         var tmp, current, top = LENGTH;
@@ -45,24 +43,51 @@ class SortVisualizer extends React.Component {
         this.resetArray();
 
         for (let i = 0; i < LENGTH; i++) {
-            let bar = document.getElementById("bar-" + String(i+1));
+            let bar = document.getElementById("bar-" + String(i + 1));
             bar.style.setProperty('background-color', '#ff4136');
         }
     }
 
-    test() {
-        let bar = document.getElementById("bar-3");
-        bar.style.setProperty('background-color', 'black');
-    }
-
-    swap() {
+    mergeSort() {
         let { array } = this.state;
-        let tmp = array[0];
-        array[0] = array[10];
-        array[10] = tmp;
+        let steps = [];
+        let sorted = algorithms.mergeSort(array, steps, 0);
 
-        this.setState({ array });
+        for (let i = 0; i < steps.length; i++) {
+            if (steps[i][0] === 0) {
+                setTimeout(() => {
+                    let check_bar = document.getElementById("bar-" + String(steps[i][1]));
+                    check_bar.style.setProperty('background-color', 'blue')
+                    setTimeout(() => {
+                        check_bar.style.setProperty('background-color', '#ff4136')
+                    }, SPEED);
+                }, i * SPEED);
+            }
+            else if (steps[i][0] === 1) {
+                setTimeout(() => {
+                    let comp1 = document.getElementById("bar-" + String(steps[i][1]));
+                    let comp2 = document.getElementById("bar-" + String(steps[i][2]));
+                    comp1.style.setProperty('background-color', '#00ff00')
+                    comp2.style.setProperty('background-color', '#00ff00')
+                    setTimeout(() => {
+                        comp1.style.setProperty('background-color', '#ff4136')
+                        comp2.style.setProperty('background-color', '#ff4136')
+                    }, SPEED);
+                }, i * SPEED);
+            }
+             if (steps[i][0] === 2) {
+                setTimeout(() => {
+                    let temp = array[steps[i][1]];
+                    array[steps[i][1]] = array[steps[i][2]];
+                    array[steps[i][2]] = temp;
+                    this.setState({ array });
+                }, i * SPEED);
+            }
+
+            
+        }
     }
+
 
     selectionSort() {
         let { array } = this.state;
@@ -75,8 +100,8 @@ class SortVisualizer extends React.Component {
                     check_bar.style.setProperty('background-color', 'blue')
                     setTimeout(() => {
                         check_bar.style.setProperty('background-color', '#ff4136')
-                    }, 10);
-                }, i * 10);
+                    }, SPEED);
+                }, i * SPEED);
             }
             else if (steps[i][0] === 1) {
                 setTimeout(() => {
@@ -86,7 +111,7 @@ class SortVisualizer extends React.Component {
                         removed.style.setProperty('background-color', '#ff4136')
                         added.style.setProperty('background-color', '#00ff00')
                     }, 1);
-                }, i * 10);
+                }, i * SPEED);
             }
             else if (steps[i][0] === 2) {
                 setTimeout(() => {
@@ -104,7 +129,7 @@ class SortVisualizer extends React.Component {
                             bar.style.setProperty('background-color', '#ff4136');
                         }
                     }
-                }, i * 10);
+                }, i * SPEED);
             }
         }
     }
@@ -122,7 +147,7 @@ class SortVisualizer extends React.Component {
                 </div>
                 <button onClick={() => this.resetVisual() }>Restart</button>
                 <button onClick={this.selectionSort}>Selection Sort</button>
-                <button onClick={this.test}>Test</button>
+                <button onClick={this.mergeSort}>Merge Sort</button>
             </div>
         );
     }
