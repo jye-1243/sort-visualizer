@@ -120,3 +120,36 @@ export function merge(left, right, start, steps) {
     //console.log("MODIFIED: " + original);
     return original;
 }
+
+//QuickSort
+// https://www.geeksforgeeks.org/quick-sort/
+export function quickSort(array, low, high, steps) {
+    if (low < high) {
+        let pi = partition(array, low, high, steps);
+
+        quickSort(array, low, pi - 1, steps);
+        quickSort(array, pi + 1, high, steps);
+    }
+}
+
+function partition(array, low, high, steps) {
+    let pivot = array[high];
+    let i = low - 1;
+    for (let j = low; j <= high - 1; j++) {
+        steps.push([1, j, high])
+        if (array[j] < pivot) {
+            i++;
+            let temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            steps.push([2, i, j])
+        }
+    }
+    let temp = array[i + 1];
+    array[i+1] = array[high];
+    array[high] = temp;
+
+    steps.push([2, i+1, high])
+
+    return (i + 1);
+}

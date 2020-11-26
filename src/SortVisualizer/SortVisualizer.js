@@ -6,6 +6,7 @@ import * as algorithms from './Algorithms.js';
 // Constants
 const LENGTH = 100;
 const SPEED = 10;
+var x = [];
 
 class SortVisualizer extends React.Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class SortVisualizer extends React.Component {
         this.selectionSort = this.selectionSort.bind(this);
         this.mergeSort = this.mergeSort.bind(this);
         this.resetArray = this.resetArray.bind(this);
+        this.quickSort = this.quickSort.bind(this);
     }
 
     componentDidMount() {
@@ -24,6 +26,10 @@ class SortVisualizer extends React.Component {
     }
 
     resetArray() {
+        for (let i = 0; i < x.length; i++) {
+            clearTimeout(x[i]);
+        }
+
         const array = [];
         // Random values from 1 to length
         for (let i = 0; i < LENGTH; i++)
@@ -65,35 +71,35 @@ class SortVisualizer extends React.Component {
         for (let i = 0; i < steps.length; i++) {
             // Check bar
             if (steps[i][0] === 0) {
-                setTimeout(() => {
+                x.push(setTimeout(() => {
                     let check_bar = document.getElementById("bar-" + String(steps[i][1]));
                     check_bar.style.setProperty('background-color', 'blue')
-                    setTimeout(() => {
+                    x.push(setTimeout(() => {
                         check_bar.style.setProperty('background-color', '#ff4136')
-                    }, SPEED);
-                }, i * SPEED);
+                    }, SPEED));
+                }, i * SPEED));
             }
             // Compare bars
             else if (steps[i][0] === 1) {
-                setTimeout(() => {
+                x.push(setTimeout(() => {
                     let comp1 = document.getElementById("bar-" + String(steps[i][1]));
                     let comp2 = document.getElementById("bar-" + String(steps[i][2]));
                     comp1.style.setProperty('background-color', '#00ff00')
                     comp2.style.setProperty('background-color', '#00ff00')
-                    setTimeout(() => {
+                    x.push(setTimeout(() => {
                         comp1.style.setProperty('background-color', '#ff4136')
                         comp2.style.setProperty('background-color', '#ff4136')
-                    }, SPEED);
-                }, i * SPEED);
+                    }, SPEED));
+                }, i * SPEED));
             }
             // Change bar value
-             if (steps[i][0] === 2) {
-                setTimeout(() => {
+            else if (steps[i][0] === 2) {
+                x.push(setTimeout(() => {
                     //let temp = array[steps[i][1]];
                     array[steps[i][1]] = steps[i][2];
                     //array[steps[i][2]] = temp;
                     this.setState({ array });
-                }, i * SPEED);
+                }, i * SPEED));
              }
 
             //console.log(this.state);
@@ -110,35 +116,35 @@ class SortVisualizer extends React.Component {
         for (let i = 0; i < steps.length; i++) {
             // Check bar
             if (steps[i][0] === 0) {
-                setTimeout(() => {
+                x.push(setTimeout(() => {
                     let check_bar = document.getElementById("bar-" + String(steps[i][1]));
                     check_bar.style.setProperty('background-color', 'blue')
-                    setTimeout(() => {
+                    x.push(setTimeout(() => {
                         check_bar.style.setProperty('background-color', '#ff4136')
-                    }, SPEED);
-                }, i * SPEED);
+                    }, SPEED));
+                }, i * SPEED));
             }
             // Compare two bars to find minimum
             else if (steps[i][0] === 1) {
-                setTimeout(() => {
+                x.push(setTimeout(() => {
                     let removed = document.getElementById("bar-" + String(steps[i][1]));
                     let added = document.getElementById("bar-" + String(steps[i][2]));
-                    setTimeout(() => {
+                    x.push(setTimeout(() => {
                         removed.style.setProperty('background-color', '#ff4136')
                         added.style.setProperty('background-color', '#00ff00')
-                    }, 1);
-                }, i * SPEED);
+                    }, 1));
+                }, i * SPEED));
             }
             // Set bar at front
             else if (steps[i][0] === 2) {
-                setTimeout(() => {
+                x.push(setTimeout(() => {
                     let temp = array[steps[i][1]];
                     array[steps[i][1]] = array[steps[i][2]];
                     array[steps[i][2]] = temp;
                     this.setState({ array });
                     console.log(steps[i]);
 
-                    setTimeout(() => {
+                    x.push(setTimeout(() => {
                         for (let j = steps[i][1]; j < LENGTH; j++) {
                             let bar = document.getElementById("bar-" + String(j));
                             if (j === steps[i][1]) {
@@ -149,9 +155,63 @@ class SortVisualizer extends React.Component {
                                 bar.style.setProperty('background-color', '#ff4136');
                             }
                         }
-                    }, 1);
+                    }, 1));
                     
-                }, i * SPEED);
+                }, i * SPEED));
+            }
+        }
+    }
+
+    // Quick Sort
+    quickSort() {
+        let { array } = this.state;
+        let copy = [];
+
+        for (let i = 0; i < array.length; i++)
+            copy.push(array[i])
+
+        let steps = [];
+        algorithms.quickSort(copy, 0, LENGTH - 1, steps);
+        let currPiv = 0;
+
+        // Iterate through steps
+        for (let i = 0; i < steps.length; i++) {
+            // Compare bars
+            if (steps[i][0] === 1) {
+                let piv = steps[i][2];
+                x.push(setTimeout(() => {
+                    let bar = document.getElementById("bar-" + String(steps[i][1]));
+                    let pivot = document.getElementById("bar-" + String(piv));
+                    bar.style.setProperty('background-color', '#0000ff')
+                    pivot.style.setProperty('background-color', '#0000ff')
+                    x.push(setTimeout(() => {
+                        bar.style.setProperty('background-color', '#ff4136')
+                        if (piv != currPiv) {
+                            pivot.style.setProperty('background-color', '#ff4136')
+                        }
+                    }, SPEED));
+                }, i * SPEED));
+
+                currPiv = steps[i][2];
+            }
+            // Change bar value
+            else if (steps[i][0] === 2) {
+                x.push(setTimeout(() => {
+
+                    let comp1 = document.getElementById("bar-" + String(steps[i][1]));
+                    let comp2 = document.getElementById("bar-" + String(steps[i][2]));
+                    comp1.style.setProperty('background-color', '#00ff00')
+                    comp2.style.setProperty('background-color', '#00ff00')
+                    x.push(setTimeout(() => {
+                        comp1.style.setProperty('background-color', '#ff4136')
+                        comp2.style.setProperty('background-color', '#ff4136')
+                    }, SPEED));
+
+                    let temp = array[steps[i][1]];
+                    array[steps[i][1]] = array[steps[i][2]];
+                    array[steps[i][2]] = temp;
+                    this.setState({ array });
+                }, i * SPEED));
             }
         }
     }
@@ -171,6 +231,7 @@ class SortVisualizer extends React.Component {
                 <button onClick={() => this.resetVisual() }>Restart</button>
                 <button onClick={this.selectionSort}>Selection Sort</button>
                 <button onClick={this.mergeSort}>Merge Sort</button>
+                <button onClick={this.quickSort}>Quick Sort</button>
             </div>
         );
     }
