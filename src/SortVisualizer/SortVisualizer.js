@@ -220,8 +220,51 @@ class SortVisualizer extends React.Component {
 
     heapSort() {
         let { array } = this.state;
+
+        let steps = [], copy = [];
+
+        for (let i = 0; i < array.length; i++)
+            copy.push(array[i])
+
         console.log(array);
-        algorithms.heapSort(array);
+        algorithms.heapSort(copy, steps);
+
+        // Iterate through steps
+        for (let i = 0; i < steps.length; i++) {
+            // Compare bars
+            if (steps[i][0] === 1) {
+                x.push(setTimeout(() => {
+                    let bar = document.getElementById("bar-" + String(steps[i][1]));
+                    let pivot = document.getElementById("bar-" + String(steps[i][2]));
+                    bar.style.setProperty('background-color', '#0000ff')
+                    pivot.style.setProperty('background-color', '#0000ff')
+                    x.push(setTimeout(() => {
+                        bar.style.setProperty('background-color', '#ff4136')
+                        pivot.style.setProperty('background-color', '#ff4136')
+                    }, SPEED));
+                }, i * SPEED));
+
+            }
+            // Change bar value
+            else if (steps[i][0] === 2) {
+                x.push(setTimeout(() => {
+
+                    let comp1 = document.getElementById("bar-" + String(steps[i][1]));
+                    let comp2 = document.getElementById("bar-" + String(steps[i][2]));
+                    comp1.style.setProperty('background-color', '#00ff00')
+                    comp2.style.setProperty('background-color', '#00ff00')
+                    x.push(setTimeout(() => {
+                        comp1.style.setProperty('background-color', '#ff4136')
+                        comp2.style.setProperty('background-color', '#ff4136')
+                    }, SPEED));
+
+                    let temp = array[steps[i][1]];
+                    array[steps[i][1]] = array[steps[i][2]];
+                    array[steps[i][2]] = temp;
+                    this.setState({ array });
+                }, i * SPEED));
+            }
+        }
         console.log(array);
         this.setState({ array }); 
     }

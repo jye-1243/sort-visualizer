@@ -156,41 +156,50 @@ function partition(array, low, high, steps) {
 
 // Heap Sort
 // From https://www.geeksforgeeks.org/heap-sort/
-export function heapSort(array) {
+export function heapSort(array, steps) {
 
     let n = array.length;
 
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-        heapify(array, n, i);
+        heapify(array, n, i, steps);
     }
 
     for (let i = n - 1; i > 0; i--) {
         let temp = array[0];
         array[0] = array[i];
         array[i] = temp;
+        steps.push([2, 0, i]);
 
-        heapify(array, i, 0);
+        heapify(array, i, 0, steps);
     }
 }
 
-function heapify(array, n, i) {
+function heapify(array, n, i, steps) {
     let largest = i;
     let l = 2 * i + 1;
     let r = 2 * i + 2;
 
-    if (l < n && array[l] > array[largest]) {
-        largest = l;
-    }
+    if (l < n) {
+        steps.push([1, l, largest])
+        if (array[l] > array[largest]) {
+            largest = l;
+        }
 
-    if (r < n && array[r] > array[largest]) {
-        largest = r;
-    }
+        if (r < n) {
+            steps.push(1, r, largest)
+            if (array[r] > array[largest]) {
+                largest = r;
+            }
 
-    if (largest != i) {
-        let temp = array[i];
-        array[i] = array[largest];
-        array[largest] = temp;
-        heapify(array, n, largest);
+            if (largest != i) {
+                let temp = array[i];
+                array[i] = array[largest];
+                array[largest] = temp;
+                steps.push([2, i, largest]);
+
+                heapify(array, n, largest, steps);
+            }
+        }
     }
 
 }
