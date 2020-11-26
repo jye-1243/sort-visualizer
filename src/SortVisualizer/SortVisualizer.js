@@ -4,7 +4,7 @@ import './sortvisualizer.scss';
 import * as algorithms from './Algorithms.js';
 
 // Constants
-const LENGTH = 100;
+const LENGTH = 200;
 const SPEED = 10;
 var x = [];
 
@@ -19,6 +19,8 @@ class SortVisualizer extends React.Component {
         this.mergeSort = this.mergeSort.bind(this);
         this.resetArray = this.resetArray.bind(this);
         this.quickSort = this.quickSort.bind(this);
+        this.heapSort = this.heapSort.bind(this);
+
     }
 
     componentDidMount() {
@@ -216,6 +218,14 @@ class SortVisualizer extends React.Component {
         }
     }
 
+    heapSort() {
+        let { array } = this.state;
+        console.log(array);
+        algorithms.heapSort(array);
+        console.log(array);
+        this.setState({ array }); 
+    }
+
     // Render function
     render() {
         const { array } = this.state;
@@ -232,6 +242,8 @@ class SortVisualizer extends React.Component {
                 <button onClick={this.selectionSort}>Selection Sort</button>
                 <button onClick={this.mergeSort}>Merge Sort</button>
                 <button onClick={this.quickSort}>Quick Sort</button>
+                <button onClick={this.heapSort}>Heap Sort</button>
+
             </div>
         );
     }
