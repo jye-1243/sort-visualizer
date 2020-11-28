@@ -19,6 +19,7 @@ $totalCols: 200;
     grid-template-rows: repeat($totalCols, 1fr);
     grid-column-gap: 1px;
     padding-top: 5vh;
+    margin: auto;
 }
 
 @mixin chartValue($data) {
@@ -34,4 +35,32 @@ $totalCols: 200;
         border-radius: 3px 3px 0 0;
         background-color: #ff4136;
     }
+}
+
+.nav-bar{
+    width: 100vw;
+    height: 5vh;
+    background-color: darkblue;
+    
+}
+
+button{
+    background-color: darkblue;
+    border: none;
+    font: bold 14px roboto, verdana;
+    color: white;
+    cursor: pointer;
+    margin-top: 1vh;
+}
+
+button:focus {
+    outline: 0;
+}
+
+.restart-btn{
+    padding-right: 25vw;
+}
+
+.sort-btn{
+    padding-right: 2vw;
 }

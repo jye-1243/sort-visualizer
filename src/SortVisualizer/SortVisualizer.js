@@ -62,6 +62,7 @@ class SortVisualizer extends React.Component {
 
     // Merge sort visualization
     mergeSort() {
+
         let { array } = this.state;
         let steps = [];
         algorithms.mergeSort(array, steps, 0);
@@ -274,6 +275,13 @@ class SortVisualizer extends React.Component {
         const { array } = this.state;
         return (
             <div>
+                <div className="nav-bar">
+                    <button className="restart-btn" onClick={() => this.resetVisual()}>Restart</button>
+                    <button className="sort-btn" onClick={this.selectionSort}>Selection Sort</button>
+                    <button className="sort-btn" onClick={this.mergeSort}>Merge Sort</button>
+                    <button className="sort-btn" onClick={this.quickSort}>Quick Sort</button>
+                    <button className="sort-btn" onClick={this.heapSort}>Heap Sort</button>
+                </div>
                 <div className="bar-graph">
                     {array.map((value, idx) => (
                         < div className={"bar-" + String(value)} id={"bar-" + String(idx)} key={idx} data-value={value}>
@@ -281,11 +289,6 @@ class SortVisualizer extends React.Component {
                         </div >
                     ))}
                 </div>
-                <button onClick={() => this.resetVisual() }>Restart</button>
-                <button onClick={this.selectionSort}>Selection Sort</button>
-                <button onClick={this.mergeSort}>Merge Sort</button>
-                <button onClick={this.quickSort}>Quick Sort</button>
-                <button onClick={this.heapSort}>Heap Sort</button>
 
             </div>
         );
