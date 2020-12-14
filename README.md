@@ -4,6 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting Started
 
+First, clone this repository. Navigate to the folder and run `npm start` to open the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. This page will automatically reload if you change any of the source files.
 
 ## Available Scripts
 
